@@ -36,7 +36,7 @@ pipeline
         {
             steps
             {
-                deploy adapters: [tomcat9(alternativeDeploymentContext: '', credentialsId: 'e5d27584-0c4f-4218-9a43-17d6e8873abe', path: '', url: 'http://172.31.11.41:8080')], contextPath: 'myprodapp', war: '**/*.war'
+                scp '/var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@52.53.148.125:/var/lib/tomcat10/webapps/prodapp.war'
             }
         }
     }
