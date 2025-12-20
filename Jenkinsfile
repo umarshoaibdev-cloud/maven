@@ -5,7 +5,7 @@ pipeline
     agent any
     stages
     {
-        stage('Download')
+        stage('Download_Loans')
         {
             steps
             {
@@ -15,7 +15,7 @@ pipeline
                 }
             }
         }
-        stage('build')
+        stage('build_Loans')
         {
             steps
             {
@@ -25,36 +25,6 @@ pipeline
                 }
             }
         }
-        stage('Deployment')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.2.4','testapp')
-                }
-            }
-        }
-        stage('Testing')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.gitDownload('FunctionalTesting')
-                    cicd.runSelenium('DeclarativePipelineSharedLibrary')
-                }
-            }
-        }
-        stage('Delivery')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.11.41','prodapp')
-                }
-            }
-        }
-    }
+        
+     }
 }
