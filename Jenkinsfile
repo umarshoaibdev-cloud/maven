@@ -1,42 +1,59 @@
+@Library('mylibrary')_
+
 pipeline
 {
     agent any
     stages
     {
-        stage('ContionusDownload')
+        stage('Download')
         {
             steps
+            {
+                script
                 {
-                    git 'https://github.com/IntelliqDevops/maven.git'
-                }    
-        }
-        stage('ContinuousBuild')
-        {
-            steps
-            {
-                sh 'mvn package'
+                    cicd.gitDownload('maven')
+                }
             }
         }
-        stage('ContinuousDeploy')
+        stage('build')
         {
             steps
             {
-               sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.2.4:/var/lib/tomcat10/webapps/testapp231.war' 
+                script
+                {
+                    cicd.buildArtifact()
+                }
             }
         }
-        stage('ContinuousTesting')
+        stage('Deployment')
         {
             steps
             {
-                git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
-                sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipeline1/testing.jar'
+                script
+                {
+                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.2.4','testapp')
+                }
             }
         }
-        stage('ContinuousDelivery')
+        stage('Testing')
         {
             steps
             {
-                sh 'scp /var/lib/jenkins/workspace/DeclarativePipeline1/webapp/target/webapp.war ubuntu@172.31.11.41:/var/lib/tomcat10/webapps/prodapp231.war'
+                script
+                {
+                    cicd.gitDownload('FunctionalTesting')
+                    cicd.runSelenium('DeclarativePipelineSharedLibrary')
+                }
+            }
+        }
+        stage('Delivery')
+        {
+            steps
+            {
+                script
+                {
+                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.11.41','prodapp')
+                }
             }
         }
     }
