@@ -11,7 +11,7 @@ pipeline
             {
                 script
                 {
-                    cicd.gitDownload('maven')
+                    cicd.gitDownload("maven")
                 }
             }
         }
@@ -25,6 +25,5 @@ pipeline
                 }
             }
         }
-        
      }
 }
