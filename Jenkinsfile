@@ -1,60 +1,24 @@
-@Library('mylibrary')_
-
-pipeline
+node('built-in')
 {
-    agent any
-    stages
+    stage('Download')
     {
-        stage('Download_master')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.gitDownload('maven')
-                }
-            }
-        }
-        stage('build_master')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.buildArtifact()
-                }
-            }
-        }
-        stage('Deployment_master')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.2.4','testapp')
-                }
-            }
-        }
-        stage('Testing_master')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.gitDownload('FunctionalTesting')
-                    cicd.runSelenium('DeclarativePipelineSharedLibrary')
-                }
-            }
-        }
-        stage('Delivery_master')
-        {
-            steps
-            {
-                script
-                {
-                    cicd.deployToTomcat('DeclarativePipelineSharedLibrary','172.31.11.41','prodapp')
-                }
-            }
-        }
+        git 'https://github.com/umarshoaibdev-cloud/maven.git'
+    }
+    stage('Build')
+    {
+        sh 'mvn package'
+    }
+    stage('Deploy')
+    {
+        sh 'scp /var/lib/jenkins/workspace/ScriptedPipeline/webapp/target/webapp.war ubuntu@172.31.11.140:/var/lib/tomcat10/webapps/testapp.war'
+    }
+    stage('Test')
+    {
+        git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+        sh 'java -jar /var/lib/jenkins/workspace/ScriptedPipeline/testing.jar'
+    }
+    stage('Delivery')
+    {
+        sh 'scp /var/lib/jenkins/workspace/ScriptedPipeline/webapp/target/webapp.war ubuntu@172.31.11.220:/var/lib/tomcat10/webapps/prodapp.war'
     }
 }
