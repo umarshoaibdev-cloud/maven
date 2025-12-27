@@ -88,7 +88,7 @@ pipeline
           }
           catch(Exception e5)
           {
-            mail bcc: '', body: 'Jenkins unable to deploy the war file', cc: '', from: '', replyTo: '', subject: 'Deployement Failed', to: 'middleware.team@gmail.com'
+            mail bcc: '', body: 'Jenkins unable to deliver the war file', cc: '', from: '', replyTo: '', subject: 'Deployement Failed', to: 'middleware.team@gmail.com'
             exit(1)
           }
         }
