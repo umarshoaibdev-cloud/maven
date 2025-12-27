@@ -39,7 +39,7 @@ pipeline
         }
       }
     }
-    stage('Deploy')
+    stage('Deployment')
     {
       steps
       {
