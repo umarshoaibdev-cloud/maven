@@ -21,5 +21,23 @@ pipeline
         }
       }
     }
+    stage('Build')
+    {
+      steps
+      {
+        scirpt
+        {
+          try
+          {
+            sh 'mvn package'
+          }
+          catch(Exception e2)
+          {
+            mail bcc: '', body: 'Jenkins unable to build the war file', cc: '', from: '', replyTo: '', subject: 'Build Failed', to: 'Dev.team@gmail.com'
+            exit(1)
+          }
+        }
+      }
+    }
   }
 }
