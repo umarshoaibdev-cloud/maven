@@ -57,5 +57,24 @@ pipeline
         }
       }
     }
+    stage('Testing')
+    {
+      steps
+      {
+        script
+        {
+          try
+          {
+            git 'https://github.com/IntelliqDevops/FunctionalTesting.git'
+            sh 'java -jar /var/lib/jenkins/workspace/DeclarativePipelineExceptionHandling/testing.jar'
+          }
+          catch(Exception e4)
+          {
+            mail bcc: '', body: 'Jenkins unable to deploy the war file', cc: '', from: '', replyTo: '', subject: 'Deployement Failed', to: 'middleware.team@gmail.com'
+            exit(1) 
+          }
+        }
+      }
+    }
   }
 }
