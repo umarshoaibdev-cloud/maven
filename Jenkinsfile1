@@ -1,0 +1,25 @@
+pipeline
+{
+  agent any
+  stages
+  {
+    stage('Download')
+    {
+      steps
+      {
+        script
+        {
+          try
+          {
+            git 'https://github.com/IntelliqDevops/maven.git'
+          }
+          catch(Exception e1)
+          {
+            echo 'Download failed'
+            exit(1)
+          }
+        }
+      }
+    }
+  }
+}
